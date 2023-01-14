@@ -20,7 +20,18 @@ pyClient.subscribe("zigbee2mqtt/switch_hallway", 0)
 pyClient.subscribe("zigbee2mqtt/motion_hallway", 0)
 pyClient.subscribe("zigbee2mqtt/ceilingLamp_hallway", 0)
 
+# Time of day parameters
+daytime = pd.DataFrame(columns=['start', 'finish'])
+daytime.at[0,'start'] = 7
+daytime.at[0,'finish'] = 16
 
+windDown = pd.DataFrame(columns=['start', 'finish'])
+windDown.at[0,'start'] = 21
+windDown.at[0,'finish'] = 22
+
+sleepHours = pd.DataFrame(columns=['start', 'finish'])
+sleepHours.at[0,'start'] = 22
+sleepHours.at[0,'finish'] = 7
 
 # Create functions
 # Hallway switch actuation
