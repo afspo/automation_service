@@ -15,6 +15,7 @@ pyClient.connect(brokerAddress, brokerPort)
 
 # Input subscriptions
 pyClient.subscribe("zigbee2mqtt/switch_hallway", 0)
+pyClient.subscribe("zigbee2mqtt/switch_livingRoom", 0)
 pyClient.subscribe("zigbee2mqtt/motion_hallway", 0)
 pyClient.subscribe("zigbee2mqtt/ceilingLamp_hallway", 0)
 
@@ -26,6 +27,14 @@ def on_message_switch_hallway(pyClient, userdata, message):
         pyClient.publish("zigbee2mqtt/ceilingLamp_hallway/set", '{"state":"ON"}')
     else:
         pyClient.publish("zigbee2mqtt/ceilingLamp_hallway/set", '{"state":"OFF"}')
+        
+# Living room switch actuation
+def on_message_switch_livingRoom(pyClient, userdata, message):
+    state_switchLivingRoom = pd.read_json(message.payload.decode("UTF-8"))
+    if state_switchLivingRoom['action'].iloc[0] == "on":
+        pyClient.publish("zigbee2mqtt/floorLamp_livingRoom/set", '{"state":"ON"}')
+    else:
+        pyClient.publish("zigbee2mqtt/floorLamp_livingRoom/set", '{"state":"OFF"}')
 
 # Hallway motion sensor activation
 def on_message_motion_hallway(pyClient, userdata, message):
@@ -37,5 +46,6 @@ def on_message_motion_hallway(pyClient, userdata, message):
 
 while True:
     pyClient.message_callback_add("zigbee2mqtt/switch_hallway", on_message_switch_hallway)
+    pyClient.message_callback_add("zigbee2mqtt/switch_livingRoom", on_message_switch_livingRoom)
     pyClient.message_callback_add("zigbee2mqtt/motion_hallway", on_message_motion_hallway)
     pyClient.loop_forever()
