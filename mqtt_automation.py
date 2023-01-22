@@ -5,9 +5,7 @@ Spyder Editor
 This is a temporary script file.
 """
 import paho.mqtt.client as mqtt
-import json
 import pandas as pd
-import datetime
 
 # mqtt setup
 brokerAddress = '192.168.1.158'
