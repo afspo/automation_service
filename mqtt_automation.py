@@ -35,7 +35,7 @@ def on_message_switch_livingRoom(pyClient, userdata, message):
     state_switchLivingRoom = pd.read_json(message.payload.decode("UTF-8"))
     if state_switchLivingRoom['action'].iloc[0] == "on":
         pyClient.publish("zigbee2mqtt/floorLamp_livingRoom/set", '{"state":"ON"}')
-    else:
+    elif state_switchLivingRoom['action'].iloc[0] == "off":
         pyClient.publish("zigbee2mqtt/floorLamp_livingRoom/set", '{"state":"OFF"}')
 
 # Hallway motion sensor activation
