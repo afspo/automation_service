@@ -6,6 +6,8 @@ This is a temporary script file.
 """
 import paho.mqtt.client as mqtt
 import pandas as pd
+import datetime as dt
+import brightness_lookup
 
 # mqtt setup
 brokerAddress = '192.168.1.158'
@@ -39,10 +41,12 @@ def on_message_switch_livingRoom(pyClient, userdata, message):
 # Hallway motion sensor activation
 def on_message_motion_hallway(pyClient, userdata, message):
     state_motionHallway = pd.read_json(message.payload.decode("UTF-8"), typ='series')
-    # if state_motionHallway['occupancy'] == 1:
-    #     pyClient.publish("zigbee2mqtt/ceilingLamp_hallway/set", '{"state":"ON"}')
-    # elif state_motionHallway['occupancy'] == 0:
-    #     pyClient.publish("zigbee2mqtt/ceilingLamp_hallway/set", '{"state":"OFF"}')  
+    if state_motionHallway['occupancy'] == 1:
+        brightnessSetpoint = brightness_lookup.getBrightness(dt.datetime.now())
+        payload = '{"brightness":'+str(brightnessSetpoint)+', "state":"ON"}'
+        pyClient.publish("zigbee2mqtt/ceilingLamp_hallway/set", payload)
+    elif state_motionHallway['occupancy'] == 0:
+        pyClient.publish("zigbee2mqtt/ceilingLamp_hallway/set", '{"state":"OFF"}')  
 
 while True:
     pyClient.message_callback_add("zigbee2mqtt/switch_hallway", on_message_switch_hallway)

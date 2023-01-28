@@ -9,25 +9,10 @@ import pandas as pd
 import numpy as np
 
 # Time of day parameters
-# daytime = pd.DataFrame(columns=['start', 'finish'])
-# daytime.at[0,'start'] = 7
-# daytime.at[0,'finish'] = 16
 daytime = (7, 16)
-
-# windDown = pd.DataFrame(columns=['start', 'finish'])
-# windDown.at[0,'start'] = 21
-# windDown.at[0,'finish'] = 22
-
 evening = (17, 19)
-
 windDown = (20, 21)
-
-# sleepHours = pd.DataFrame(columns=['start', 'finish'])
-# sleepHours.at[0,'start'] = 22
-# sleepHours.at[0,'finish'] = 7
-
 sleepHours = (22, 23)
-
 overnight = (0, 6)
 
 # Define brightness
@@ -42,7 +27,7 @@ brightness.windDown = 100
 brightness.sleepHours = 10
 
 # Set up array of zeros to ensure light defaults to off where there are gaps
-dayNames = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+dayNames = [0, 1, 2, 3, 4, 5, 6]
 zero_array = np.zeros(dtype=np.uint8, shape=(24, len(dayNames)))
 brightnessLookup = pd.DataFrame(zero_array, columns=dayNames)
 
@@ -53,3 +38,7 @@ for dayNames in dayNames:
     brightnessLookup[dayNames][min(evening):max(evening)+1] = brightness.evening
     brightnessLookup[dayNames][min(windDown):max(windDown)+1] = brightness.windDown
     brightnessLookup[dayNames][min(sleepHours):max(sleepHours)+1] = brightness.sleepHours
+    
+def getBrightness(triggerTime):
+    brightnessSetpoint = brightnessLookup[triggerTime.weekday()].iloc[triggerTime.hour]    
+    return brightnessSetpoint
