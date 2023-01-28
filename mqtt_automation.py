@@ -26,7 +26,7 @@ pyClient.subscribe("zigbee2mqtt/ceilingLamp_hallway", 0)
 def on_message_switch_hallway(pyClient, userdata, message):
     state_switchHallway = pd.read_json(message.payload.decode("UTF-8"))
     if state_switchHallway['action'].iloc[0] == "on":
-        pyClient.publish("zigbee2mqtt/ceilingLamp_hallway/set", '{"state":"ON"}')
+        pyClient.publish("zigbee2mqtt/ceilingLamp_hallway/set", '{"brightness":254, "state":"ON"}')
     else:
         pyClient.publish("zigbee2mqtt/ceilingLamp_hallway/set", '{"state":"OFF"}')
         
