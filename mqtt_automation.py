@@ -37,6 +37,12 @@ def on_message_switch_livingRoom(pyClient, userdata, message):
         pyClient.publish("zigbee2mqtt/floorLamp_livingRoom/set", '{"state":"ON"}')
     elif state_switchLivingRoom['action'].iloc[0] == "off":
         pyClient.publish("zigbee2mqtt/floorLamp_livingRoom/set", '{"state":"OFF"}')
+    elif state_switchLivingRoom['action'].iloc[0] == "brightness_move_up":
+        pyClient.publish("zigbee2mqtt/floorLamp_livingRoom/set", '{"brightness_move":100}')
+    elif state_switchLivingRoom['action'].iloc[0] == "brightness_move_down":
+        pyClient.publish("zigbee2mqtt/floorLamp_livingRoom/set", '{"brightness_move":-100}')
+    elif state_switchLivingRoom['action'].iloc[0] == "brightness_stop":
+        pyClient.publish("zigbee2mqtt/floorLamp_livingRoom/set", '{"brightness_move":0}')
 
 # Hallway motion sensor activation
 def on_message_motion_hallway(pyClient, userdata, message):
