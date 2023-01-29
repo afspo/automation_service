@@ -20,11 +20,11 @@ class brightness():
     def __init__(self, period, brightness):
         self.brightness = brightness
         
-brightness.overnight = 10
+brightness.overnight = 0
 brightness.daytime = 0
 brightness.evening = 254
 brightness.windDown = 100
-brightness.sleepHours = 10
+brightness.sleepHours = 0
 
 # Set up array of zeros to ensure light defaults to off where there are gaps
 dayNames = [0, 1, 2, 3, 4, 5, 6]
