@@ -43,8 +43,9 @@ def on_message_motion_hallway(pyClient, userdata, message):
     state_motionHallway = pd.read_json(message.payload.decode("UTF-8"), typ='series')
     if state_motionHallway['occupancy'] == 1:
         brightnessSetpoint = brightness_lookup.getBrightness(dt.datetime.now())
-        payload = '{"brightness":'+str(brightnessSetpoint)+', "state":"ON"}'
-        pyClient.publish("zigbee2mqtt/ceilingLamp_hallway/set", payload)
+        if brightnessSetpoint > 0:
+            payload = '{"brightness":'+str(brightnessSetpoint)+', "state":"ON"}'
+            pyClient.publish("zigbee2mqtt/ceilingLamp_hallway/set", payload)
     elif state_motionHallway['occupancy'] == 0:
         pyClient.publish("zigbee2mqtt/ceilingLamp_hallway/set", '{"state":"OFF"}')  
 
